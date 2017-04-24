@@ -4,4 +4,5 @@ main-blx.bib
 *.bbl
 *.gz
 *.xml
+*.blg
 auto
