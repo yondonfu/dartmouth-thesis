@@ -1,0 +1,7 @@
+main-blx.bib
+*.aux
+*.log
+*.bbl
+*.gz
+*.xml
+auto

@@ -1,0 +1,26 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[backend=bibtex]{biblatex} % block=ragged wraps lines in bib
+
+\bibliography{bib/introduction, bib/background, bib/git, bib/protocol}
+
+\begin{document}
+
+\title{
+  {OpenCollab:}\\
+  {A Blockchain Based Protocol to Incentivize Open Source Software Development and Governance}
+}
+\author{Yondon Fu}
+\date{\today}
+
+\maketitle
+
+\include{sections/introduction}
+\include{sections/background}
+\include{sections/git}
+\include{sections/protocol}
+\include{sections/conclusion}
+
+\printbibliography
+
+\end{document}
