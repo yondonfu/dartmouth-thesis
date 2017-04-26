@@ -1,13 +1,77 @@
 \section{Background}
 
+Despite only recently receiving more mainstream attention among developers and business
+people, cryptocurrencies and blockchains have a long history. The technical
+foundations of cryptocurrencies and blockchains evolved from past work by
+computer science researchers. Two of the most important areas of research are in
+electronic cash systems and digital time-stamping.
+
 \subsection{Electronic Cash Systems}
+
+The advent of the Internet and the mainstream adoption of computing devices
+allowed people to freely transfer data between each other. A logical extension
+of online data transfer is online cash transfer. However, creating an electronic
+cash system comes with a number challenges. Similar to distributed systems, a useable
+electronic system also requires the ACID properties\cite{camp1995}:
+
+\begin{itemize}
+  \item Atomicity: a transaction either occurs completely or does not occur at all
+  \item Consistency: relevant parties for a transaction agree on the critical
+    facts of exchange
+  \item Isolation: transactions do not interfere with each other
+  \item Durability: if one or more computers crash, the system should be able to
+    recover to the last consistent state
+\end{itemize}
+
+David Chaum attempted to design a system with some of these properties with his
+DigiCash project. In DigiCash, a bank issues and verifies electronic tokens that network
+users can exchange with one another\cite{camp1995}. One of the flaws of
+DigitCash is that it can only offer durable transactions in exchange for a loss
+anonymity. Network users must present tokens to the bank for verification or be
+at risk of double spending attacks since electronic messages can be duplicated.
+Additionally, this reliance on the bank creates a bottleneck for system
+throughput and a central point of failure. In the scenario where an attacker
+gains access to the bank's private key, the attacker can create counterfeit
+tokens that are indistinguishable from valid tokens at will.
 
 \subsection{Digital Time-Stamping}
 
+The Internet and mainstream adoption of computing devices allowed for the
+widespread digitization of all types of documents. While the digitization of
+documents provided many benefits, it also came with the problem of how to
+certify the existence and time of creation or change of a digital document.
+
+In 1991, Haber and Stornetta presented a time-stamping method for digital
+documents that consisted of certificates cryptographically signed by a time-stamping service. The
+certificates contain the hash of the document as well as linking information from a
+previous certificate which includes a hash of the previous certificate's linking
+information\cite{haber1991}. The result is a hash linked chain of certificates
+that prevents the faking of time-stamps.
+
+Bayer, Haber and Stornetta extended this time-stamping method using merkle
+trees. In the original time-stamping method, verification of a document
+timestamp can require at most N steps by following the chain links to a
+time-stamp certificate that is trustworthy\cite{bayer1993}. Instead of linking N
+hashes of documents, the hash values can be stored in a merkle tree.
+Participants can record the hashes of their own documents and the sibling hash
+values along the path from the document hash to the root of the merkle tree.
+Consequently, verification can be done in at most $\lg N$ steps by presenting the
+document hash and the $\lg N$ hashes on the path to the root. This modified
+time-stamping approach reduces storage requirements and verification time.
+
 \subsection{Blockchains}
+
+Blockchains combine learnings from previous electronic cash systems like Chaum's
+DigiCash and digital time-stamping methods. A blockchain is distributed ledger
+that is not controlled or managed by a central entity. The ledger is powered by
+a network of connected computers that use a consensus mechanism to reach agreement over shared data\cite{whatisblockchain}.
 
 \subsection{Cryptographic Primitives and Data Structures}
 
 \subsection{Bitcoin}
 
 \subsection{Ethereum}
+
+% Local Variables:
+% org-ref-default-bibliography: ../bib/background.bib
+% End:

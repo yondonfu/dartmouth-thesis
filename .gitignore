@@ -1,4 +1,6 @@
 main-blx.bib
+.DS_STORE
+*.out
 *.aux
 *.log
 *.bbl

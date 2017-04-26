@@ -13,18 +13,30 @@ open source web framework Ruby on Rails not only powers popular applications
 such as Twitter and Github that millions of people rely on everyday, but it also
 made web application development accessible to a broader audience by abstracting
 away the details of composing together components such as HTTP request handling,
-database querying and templating.
+database querying and templating. Given the importance of open source software,
+the task at hand for technologists is to figure out how to make open source
+software projects sustainable such that organizations and individuals in the
+future can continue to rely on them in the future.
 
 The sustainability of an open source software project is tied to project health
 and support. Project health is determined by how actively and adequately project
-maintainers and contributors communicate with users such that the project
+developers communicate with users such that the project
 addresses the needs of the community. Project support is determined by the
-availability of resources to develop a project\cite{successOSS}.
+availability of financial and technical resources to develop a project\cite{successOSS}. A sustainable
+open source software projected needs to be both healthy and supported.
 
-Developer time and attention are the scarcest resources in open source software
-projects. Users might leave a project in search of alternatives that better suit
-their needs if project developers fail to properly allocate their time and
-attention. Canonical, the company behind the Linux operating system Ubuntu,
+A healthy and supported project optimizes the use of developer time and
+attention, the scarcest resources in open source software projects.
+Communication between developers and users in a healthy project informs
+developers of community needs and issues to potentially focus their time and
+attention on. Availability of financial and technical resources in a supported
+project ensures developers are free to allocate their all of their time and attention on
+project issues. Consequently, in a healthy and supported project, developers can
+properly allocate their time and attention according to community needs.
+
+If project developers fail to properly allocate their time and attention, users
+might leave a project in search of alternatives that better suit
+their needs. Canonical, the company behind the Linux operating system Ubuntu,
 created fragmentation in the Linux community when it shipped a new version of
 Ubuntu with the Unity interface rather than the standard GNOME
 interface\cite{ubuntuUnity}. Canonical's failure to properly poll for user
@@ -34,10 +46,73 @@ the Ubuntu project.
 \subsection{Bounty Systems}
 
 A proposed solution to open source software sustainability is a bounty system
-for issues such as the one operated by the website
+for project issues such as the one operated by the website
 Bountysource\cite{bountysource}. In these systems, users can attach monetary
-bounties to project issues that are rewarded to contributors that successfuly
-resolve issues.
+bounties to project issues that are rewarded to contributors that successfully
+resolve issues. While these bounty systems may help projects attract more
+contributors, they do not take into account the incentives of maintainers. The
+work done by maintainers to review and merge in code is just
+as crucial as the work done by contributors. Consequently, bounty systems only
+partially help with project support.
+
+Furthermore, bounty systems do not necessarily help with
+project health. Although in some cases, multiple users placing bounties on an
+issue might signal the importance the community places on that particular issue,
+it is also possible for malicious actors to place large bounties on issues that
+would negatively impact project quality. Such a possibility can place a burden
+on developers of filtering signal from noise and also introduces the possibility
+of collusion - a contributor might share a large bounty if a maintainer agrees
+to merge it into the codebase even if the contributed code is of poor quality.
+As a result, bounty systems can actualy hamper communication
+between developers and users leading to unmet community needs. Adding any form of financial compensation to open source
+software projects needs to take into align the incentives of all parties
+involved or else perverse incentives might arise leading to malicious behavior
+that harms the quality of the project.
+
+Lastly, bounty systems operated by websites like Bountysource rely on a
+centralized entity to facilitate transactions. This reliance on a centralized
+entity not only results in a central point of failure, but can actually be more
+costly for users. For example, although users can freely transact within the bounty system, Bountysource
+charges a 10\% withdrawal fee if a user wants to cash out. As a result, users
+choose between giving up a portion of their monetary rewards and giving up the numerous
+opportunies to use their monetary rewards for their own benefit outside the bounty system. This withdrawal free
+discourages users from leaving the system which benefits Bountysource, but harms users.
+
+Cryptocurrencies, blockchains and smart contracts introduce the possibility of building protocols
+with embedded economic incentives. These protocols obviate the need for a
+centralized entity to facilitate transactions within a distributed network of
+users.
+
+\subsection{Contributions}
+
+The primary contributions of this thesis are the following:
+
+\begin{itemize}
+  \item A command line tool that enables a decentralized Git workflow for
+    developing open source software without relying on a a centralized service
+    like Github (Section \ref{sec:git}).
+  \item A proof-of-concept blockchain based protocol to incentivize open source
+    software development and governance (Section \ref{sec:opencollab}).
+\end{itemize}
+
+The motivation behind these contributions is to push the discussion on how to
+improve open source software sustainability. In particular, these contributions are
+attempts to answer the following questions relating to open source software sustainability.
+
+\begin{itemize}
+  \item How can developers poll for user opinion on issue
+    priorization for a project?
+  \item How can a project attract regular contributors?
+  \item How can maintainers be incentivized to carefully review and merge pull
+    requests such that the quality of a project is upheld?
+  \item The set of maintainers for a project should be able to change over time.
+    However, maintainers might be reluctant to leave a project in fear of
+    creating a leadership vacuum. How can incentives be structured such that
+    people want to become maintainers?
+\end{itemize}
+
+A detailed description of these contributions can be found in Sections
+\ref{sec:git} and \ref{sec:opencollab}.
 
 % Local Variables:
 % org-ref-default-bibliography: ../bib/introduction.bib
