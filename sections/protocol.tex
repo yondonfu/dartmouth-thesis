@@ -4,30 +4,21 @@
 \subsection{Protocol Roles}
 
 \begin{itemize}
-  \item \textbf{Voters}: vote for project issues by staking tokens. The weight
-    of a vote is proportional to the number of tokens staked.
-  \item \textbf{Contributors}: open pull requests to resolve issues by staking
-    tokens. If a contributor's pull request is merged into the project, the
-    contributor earns a portion of an issue's token reward.
+  \item \textbf{Curators}: curate project issues by staking tokens.
+  \item \textbf{Contributors}: open pull requests to resolve issues by staking tokens.
   \item \textbf{Maintainers}: review and merge pull requests for issues by
-    staking tokens. If a maintainer successfully merges in a pull request, the
-    maintainer earns a portion of the issue's token reward.
+    staking tokens.
 \end{itemize}
 
 \subsection{OpenCollab Token}
 
 The OpenCollab token (OCT) powers the OpenCollab protocol. The value offered by
-the token is influence over an open source software project. Voters acquire tokens
-to signal the importance of various project issues. Contributors acquire tokens to
-open pull requests and earn additional tokens by making quality contributions to
-a project. Maintainers acquire tokens to merge pull requests and earn additional
-tokens for merging quality contributions into a project. Furthermore, the token is
-used for a number of purposes in the protocol:
+the token is influence over an open source software project. Furthermore, the
+token serves the following purposes in the protocol:
 
 \begin{itemize}
-  \item Used in a staking mechanism for issue voting. Voters stake tokens when
-    voting for an issue. The amount of tokens staked signals the importance a
-    voter places on an issue.
+  \item Used in a staking mechanism for issue curation. Curators stake tokens to
+    signal the importance they place on an issue.
   \item Used in a staking mechanism for opening pull requests. Contributors
     stake a certain number of tokens when opening a pull request. If a
     contributor's pull request is closed without being merged in to the project,
@@ -42,11 +33,106 @@ used for a number of purposes in the protocol:
     tokens discrouages maintainers from merging pull requests that do not
     benefit a project. The challenge and voting process for a merge is described
     in more detail in Section \ref{sec:merge}.
+  \item Used in deposits for token holders that choose to participate as voters
+    in protocol governance.
 \end{itemize}
 
-\subsection{Voting on Issues}
+An initial allocation of tokens will be distributed so that the various protocol
+roles can be fulfilled by token holders. A project creator can initialize a Mango repository and mint a certain amount of
+tokens for the initial allocation. The initial allocation might be done using a
+token crowdsale or by disbursement at the discretion of the project creator.
+
+\subsection{Curating Issues}
+
+Curators stake a number of tokens to an issue to signal the importance that they
+place on the issue. Since curators lock up their tokens for a period of time
+when they stake tokens to an issue, they have limited curation power. Curators exchange either funds for tokens by purchasing them
+on the secondary market or work for tokens by providing work to the project as a
+contributor or maintainer. Furthermore, since curators take on the risk of a
+fall in token value, they have skin in the game\cite{skininthegame}. If curators
+signal importance for bad issues, developers poorly allocate their time and
+attention. If developers properly allocate their time and attention on resolving
+issues that would increase the quality of a project, the community might lose
+interest and less people would desire influence over the project leading to a
+fall in token value. Consequently, curators have an incentive to signal
+importance for issues that accurately reflect the needs of the community. As
+well curated issues are resolved, the value of the token would increase thereby
+benefiting curators.
 
 \subsection{Opening Pull Requests}
 
+Contributors open pull requests by staking \textproc{contributorStake} tokens,
+where \textproc{contributorStake} is a repository parameter.
+
+If a contributor's pull request is successfully merged by a maintainer, the
+contributor receives a portion of the issue's token reward. The portion can be
+calculated as \textproc{reward} - (\textproc{reward} $*$ \textproc{maintainerPercentage}).
+
+If a contributor's pull request is closed without being merged into the project,
+the contributor's \textproc{contributorStake} staked tokens are destroyed.
+
 \subsection{Merging Pull Requests}
 \label{sec:merge}
+
+Maintainers merge pull requests by staking \textproc{maintainerStake} tokens,
+where \textproc{maintainerStake} is a repository parameter.
+
+If a maintainer wants to merge a pull request, it calls
+\textproc{initMergePullRequest(id)} to signal an intent to merge a particular pull
+request and starts a challenge period. During this period, any token holder can
+challenge the maintainer by calling \textproc{challenge()} and staking
+\textproc{challengerStake} tokens.
+
+If a maintainer is not challenged during the challenge period, he can call
+\textproc{mergePullRequest(id)}. The maintainer receives a portion of the
+issues's token reward which can be calculated as \textproc{reward} $*$ \textproc{maintainerPercentage}.
+
+If a maintainer is challenged during the challenge period, a voting
+period begins. Voting takes place using a two step commit and reveal protocol
+first formalized by Brassard, Chaum and Crepeau\cite{proofsofknowledge}. During
+the commit step, voters with a minimum \textproc{voterDeposit} deposit in the
+smart contract vote to uphold or veto a maintainer's merge by calling
+\textproc{commitVote(hash)} with the cryptographic hash of their vote and a secret
+phrase. A vote to uphold is a $0$ and a vote to veto is a $1$. The secret phrase
+can be any random string only known to the voter. The value of the vote is
+secure from an attacker as long as only the voter knows the secret phrase used
+when generating the hash. We use the \textproc{keccak256} hashing function since it is used by Ethereum.
+
+During the reveal step, voters reveal the values of their votes by submitting
+the concatenation of their vote and secret phrase used in the commit step by
+calling \textproc{revealVote(vote)}. The smart contract verifies that the
+submitted vote corresponds with the committed hash and tallies up votes as
+voters reveal them. Finally, anyone can call \textproc{voteResult()} which
+compares the number of uphold and veto votes. The value that receives the
+majority of vote ($\geq 50\%$) wins. Voters on the losing side of the vote are
+penalized such that \textproc{voterPenaltyPercentage} is deducted from their
+deposits. Voters on the winning side of the vote are rewarded such that
+\textproc{voterRewardPercentage} is added to their deposits.
+
+If a maintainer's merge decision is upheld, the maintainer is able to call
+\textproc{mergePullRequest(id)} to finalize the merge. The challenger's
+\textproc{challengerStake} staked tokens are destroyed and the maintainer can
+claim his portion of the issue token reward.
+
+If a maintainer's merge decision is vetoed, the challenger's staked tokens are
+returned and the maintainer's \textproc{maintainerStake} tokens are destroyed and is removed from the maintainer set for the
+repository. Consequently, the former maintainer would not only lose the staked
+tokens, but also the economic value of future issue token rewards. The
+possibility of losing tokens and maintainer status serves to encourage
+maintainer to only merge pull requests that ensure the quality of the project.
+
+During a voting period, a malicious maintainer might attempt to bribe voteres
+to vote to uphold the merge decision. However, given $N$ voters, a maintainer
+would have to bribe $N/2$ voters to ensure the merge decision is upheld. Since a
+two step commit and reveal protocol is used for voting, voters cannot know with
+certainty that other voters will accept the maintainer's bribe. Furthermore,
+since a voter will be penalized if he is on the losing side of the vote and
+rewarded if he is on the winning side of the vote, the bribe would need to be
+greater than both the possible reward and penalty. An economically rational
+maintainer would not try to bribe voters to finalize a merge as long as the cost
+of the bribe multiplied across $N/2$ voters is greater than the issue token reward a
+maintainer stands to gain from merging in the pull request.
+
+% Local Variables:
+% org-ref-default-bibliography: ../bib/protocol.bib
+% End:
