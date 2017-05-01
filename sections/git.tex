@@ -3,7 +3,37 @@
 
 \subsection{Mango}
 
+Althought Git is a distributed version control system, it is commonly used in a
+centralized manner. Developers often work using a local Git repository and
+coordinate with other developers by pushing their changes to a remote Git
+repository hosted somewhere. While developers can choose to use their own
+servers to host remote Git repositories, it is far more common to rely on a web
+service such as Github to handle hosting. Outsourcing hosting work to Github
+relieves developers of additional work, but also forces developers to trust and
+rely on Github.
+
+Mango is a remote protocol for Git that uses Ethereum smart contracts for repository
+access control and stores Git objects in decentralized content addressable storage
+networks\cite{mango}. Moving repository control away from a centralized third party to a smart
+contract also introduces the possibility of new repository features such as programatic
+payments and voting mechansims. A smart contract controlled repository makes the
+economic incentives for development and governance in the OpenCollab protocol possible.
+
 \subsection{Extensions to Mango}
+
+In order for Mango to be viable for a decentralized Git workflow, it needs
+to support pull requests and issues. As a part of our contributions, we
+extended the \textproc{MangoRepo} smart contract implementation by adding an
+issue tracking system and pull request support.
+
+Users create and edit issues by uploading issue contents to Swarm and mapping
+the Swarm hash to an issue id in the contract.
+
+Users can create a pull request by forking the project and initializing
+a new Mango repository for the fork. The user can then make relevant changes in
+the fork, push the fork using Mango and reference the \textproc{MangoRepo}
+contract address for the fork in a new pull request. Maintainers can then review
+a pull request by cloning the Mango repository using its contract address.
 
 % Local Variables:
 % org-ref-default-bibliography: ../bib/git.bib

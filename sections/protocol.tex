@@ -1,6 +1,13 @@
 \section{OpenCollab Protocol}
 \label{sec:opencollab}
 
+The OpenCollab protocol is implemented by a set of Ethereum smart contracts. By
+building on the Ethereum platform, we can rely on security properties of the
+underlying Ethereum blockchain. With the details of consensus and security
+abstracted away, the OpenCollab protocol focuses on defining economic incentives
+and rules that encourage participants maintain and further the quality of an open
+source software project.
+
 \subsection{Protocol Roles}
 
 \begin{itemize}
@@ -9,6 +16,11 @@
   \item \textbf{Maintainers}: review and merge pull requests for issues by
     staking tokens.
 \end{itemize}
+
+\begin{figure}[]
+  \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{figures/devflow.png}
+  \centering
+\end{figure}
 
 \subsection{OpenCollab Token}
 
@@ -41,6 +53,11 @@ An initial allocation of tokens will be distributed so that the various protocol
 roles can be fulfilled by token holders. A project creator can initialize a Mango repository and mint a certain amount of
 tokens for the initial allocation. The initial allocation might be done using a
 token crowdsale or by disbursement at the discretion of the project creator.
+
+OCT is an ERC20 compliant token\cite{erc20} and is divisble by $10^{18}$. When a
+repository using the OpenCollab protocol is created, a smart contract is created
+governing a OCT that is specific to that particular repository. As a result,
+there can be many repository specific versions of OCT.
 
 \subsection{Curating Issues}
 
