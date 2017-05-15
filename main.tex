@@ -2,21 +2,38 @@
 \usepackage[utf8]{inputenc}
 \usepackage[backend=bibtex,block=ragged]{biblatex} % block=ragged wraps lines in bib
 \usepackage{hyperref}
+\usepackage{url}
 \usepackage{graphicx}
+\usepackage{framed}
 \usepackage{algpseudocode}
 \usepackage{algorithm}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{mygreen}{rgb}{0,0.55,0}
+
+\lstdefinestyle{mystyle}{
+  language=java,
+  keywordstyle=\bfseries\color{blue},
+  commentstyle=\color{mygreen}
+}
+
+\lstset{style=mystyle}
+
 \hypersetup{
   colorlinks=true,
   linkcolor=blue
 }
 
-\bibliography{bib/introduction, bib/background, bib/git, bib/protocol}
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{6000}
+\bibliography{bib/introduction, bib/background, bib/git, bib/protocol, bib/designpatterns}
 
 \begin{document}
 
 \title{
   {OpenCollab:}\\
-  {A Blockchain Based Protocol to Incentivize Open Source Software Development and Governance}
+  {A Blockchain Based Protocol to Incentivize Open Source Software Development}
 }
 \author{Yondon Fu}
 \date{\today}
@@ -27,6 +44,7 @@
 \include{sections/background}
 \include{sections/git}
 \include{sections/protocol}
+\include{sections/designpatterns}
 \include{sections/conclusion}
 
 \printbibliography

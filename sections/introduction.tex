@@ -23,7 +23,7 @@ and support. Project health is determined by how actively and adequately project
 developers communicate with users such that the project
 addresses the needs of the community. Project support is determined by the
 availability of financial and technical resources to develop a project\cite{successOSS}. A sustainable
-open source software projected needs to be both healthy and supported.
+open source software project needs to be both healthy and supported.
 
 A healthy and supported project optimizes the use of developer time and
 attention, the scarcest resources in open source software projects.
@@ -65,7 +65,7 @@ of collusion - a contributor might share a large bounty if a maintainer agrees
 to merge it into the codebase even if the contributed code is of poor quality.
 As a result, bounty systems can actualy hamper communication
 between developers and users leading to unmet community needs. Adding any form of financial compensation to open source
-software projects needs to take into align the incentives of all parties
+software projects needs to align the incentives of all parties
 involved or else perverse incentives might arise leading to malicious behavior
 that harms the quality of the project.
 
@@ -78,12 +78,39 @@ choose between giving up a portion of their monetary rewards and giving up the n
 opportunies to use their monetary rewards for their own benefit outside the bounty system. This withdrawal free
 discourages users from leaving the system which benefits Bountysource, but harms users.
 
-The advent of cryptocurrencies and blockchains introduce the
-possibility of embedding the rules for a bounty system and other economic
-incentives directly into a protocol. Rather than relying on a centralized
-service to enforce the rules of a system, users can instead use a decentralized
-service powered by a blockchain protocol. The rules of the protocol would
-facilitate transactions within a distributed network of users.
+\subsection{Cryptocurrencies and Blockchain Systems}
+
+The advent of cryptocurrencies and blockchains introduce a new decentralized
+paradigm for social systems. Cryptocurrencies are digital assets that rely on
+cryptography to secure transactions. In general, when we use the term
+cryptocurrencies, we describe decentralized
+cryptocurrencies managed by a distributed network of computers as opposed to
+fiat currencies that are managed by a central bank. Blockchains are the
+underlying technology that make these cryptocurrencies possible. These data
+structures establish the state of a system, whether it be a currency system or
+otherwise, without placing trust in a single entity. We will discuss blockchains
+in more detail in Section \ref{sec:blockchains}.
+
+Blockchains can not only enable the creation of a bounty system that is not
+managed by a single entity, but also allows for the creation of a system with
+more complex rules that potentially offer economic support in a way that aligns the
+incentives of all parties involved. With blockchains, developers can embed a set
+of rules for updating system state directly into software. Instead of trusting a
+centralized entity to enforce the rules, users know that the software will
+enforce the rules since it is programmed to determinstically execute and respond
+to a predetermined set of instructions. In a centralized paradigm, systems rely
+on central entities for coordination and organization. In a decentralized
+paradigm, systems are formed by a distributed network of self-coordinating and
+self-organizing users that follow a common software protocol powered by a
+blockchain. Protocols can economically incentivize certain actions by rewarding
+users with protocol native cryptocurrencies if conditions established in the
+protocol rule set are fulfilled.
+
+Communities around open source software projects currently rely on centralized
+services to coordinate and collaborate. Adding monetary rewards to a project in
+a way that aligns interests of all parties is not only difficult, but also adds
+middlemen and transaction costs to the system. Cryptocurrencies and
+blockchains can be the building blocks for a potentially better system.
 
 \subsection{Contributions}
 
@@ -91,10 +118,10 @@ The primary contributions of this thesis are the following:
 
 \begin{itemize}
   \item A command line tool that enables a decentralized Git workflow for
-    developing open source software without relying on a a centralized service
+    developing open source software without relying on a centralized service
     like Github (Section \ref{sec:git}).
   \item A proof-of-concept blockchain based protocol to incentivize open source
-    software development and governance (Section \ref{sec:opencollab}).
+    software development (Section \ref{sec:opencollab}).
 \end{itemize}
 
 The code for the command line tool is available open source at \url{https://github.com/yondonfu/opencollab}.
@@ -112,11 +139,7 @@ attempts to answer the following questions relating to open source software sust
   \item How can a project attract regular contributors?
   \item How can maintainers be incentivized to carefully review and merge pull
     requests such that the quality of a project is upheld?
-  \item The set of maintainers for a project should be able to change over time.
-    However, maintainers might be reluctant to leave a project in fear of
-    creating a leadership vacuum. How can incentives be structured such that
-    people want to become maintainers?
-\end{itemize}
+ \end{itemize}
 
 A detailed description of these contributions can be found in Sections
 \ref{sec:git} and \ref{sec:opencollab}.

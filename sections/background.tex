@@ -76,7 +76,7 @@ system implementing such a protocol was never implemented in practice.
 \subsection{Digital Time-Stamping}
 
 Widespread digitization of all types of documents brought many benefits to
-society, but alos introduced the question of how to prove the existence and time of creation or change of a
+society, but also introduced the question of how to prove the existence and time of creation or change of a
 digital document.
 
 In 1991, Haber and Stornetta presented a time-stamping method for digital
@@ -98,15 +98,16 @@ document hash and the $\lg N$ hashes on the path to the root. This modified
 time-stamping approach reduces storage requirements and verification time.
 
 \subsection{Blockchains}
+\label{sec:blockchains}
 
 Blockchains combine learnings from past work in distributed consensus,
 electronic money and digital time-stamping. A blockchain is a type of distributed system with two key defining
 characteristics. The first characteristic is that transactions are grouped into blocks. A
-common optimization is to store the transactions in a merkle tree and only
-include the merkle root in the block reminiscient of Bayer, Haber and
-Stronetta's digital time-stamping method using merkle trees. This optimization
-allows for easy verification of the existence of a transaction while decreasing
-the storage requirements for a block. The second characteristic is that blocks
+common optimization reminiscient of Bayer, Haber and
+Stronetta's digital time-stamping method using merkle trees is to store the root of a merkle tree that contains
+transactions in the block header. This optimization allows clients to easily
+verify transactions solely using downloaded block headers without storing all
+the actual transactions. The second characteristic is that blocks
 are linked by cryptographic hashes. As demonstrated by Haber and Stornetta's
 work with hash linked digital timestamps, a hash linked chain of blocks prevents
 tampering of blocks unless an adversary has majority control of the system such
@@ -116,9 +117,11 @@ mechanism to reach agreement over shared data\cite{whatisblockchain}.
 
 The first blockchain was the Bitcoin blockchain\cite{bitcoin}. Bitcoin uses a
 proof-of-work consensus algorithm based on Adam Back's hashcash cost function.
-Nodes solve partial hash collisions to propose blocks of transactions. Additionally, Bitcoin also introduced an economic mechanism as a
+Network nodes, commonly known as miners, solve partial hash collisions to propose blocks of transactions. Additionally, Bitcoin also introduced an economic mechanism as a
 complement to cryptographic primitives to secure distributed systems by
-rewarding nodes that propose blocks with a economically valuble token - bitcoin.
+rewarding miners with an economically valuble token - the
+bitcoin cryptocurrency. Miners are economically motivated to help secure and add
+new transactions to the blockchain.
 
 \subsection{Ethereum}
 
@@ -142,7 +145,7 @@ Furthermore, various members of the community are actively researching methods
 to better secure the Ethereum network including formal verification,
 proof-of-stake as an alternative consensus algorithm to proof-of-work and smart
 contract programming languages with stronger security guarantees.
-Consequently, with these points in mind we decided to build OpenCollab on Ethereum.
+Consequently, with these points in mind we decided to build the OpenCollab protocol on Ethereum.
 
 % Local Variables:
 % org-ref-default-bibliography: ../bib/background.bib
