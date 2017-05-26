@@ -10,6 +10,7 @@ and rules that encourage open source software sustainability.
 \subsection{Protocol Roles}
 
 \begin{itemize}
+  \item \textbf{Voters}: participate in governance voting by depositing tokens.
   \item \textbf{Curators}: curate project issues by staking tokens.
   \item \textbf{Contributors}: open pull requests to resolve issues by staking tokens.
   \item \textbf{Maintainers}: review and merge pull requests for issues by
@@ -23,6 +24,8 @@ the token is influence over an open source software project. Furthermore, the
 token serves the following purposes in the protocol:
 
 \begin{itemize}
+  \item Used in deposits for token holders that choose to participate as voters
+    in protocol governance.
   \item Used in a staking mechanism for issue curation. Curators stake tokens to
     signal the importance they place on an issue.
   \item Used in a staking mechanism for opening pull requests. Contributors
@@ -39,8 +42,6 @@ token serves the following purposes in the protocol:
     tokens discrourages maintainers from merging pull requests that do not
     benefit a project. The challenge and voting process for a merge is described
     in more detail in Section \ref{sec:merge}.
-  \item Used in deposits for token holders that choose to participate as voters
-    in protocol governance.
 \end{itemize}
 
 An initial allocation of tokens will be distributed so that the various protocol
@@ -52,6 +53,18 @@ OCT is an ERC20 compliant token\cite{erc20} and is divisble by $10^{18}$. When a
 repository using the OpenCollab protocol is created, a smart contract is created
 governing a OCT that is specific to that particular repository. As a result,
 there can be many repository specific versions of OCT.
+
+\subsection{Governance Voting}
+
+Token holders can elect to participate in governance voting by depositing
+\textproc{voterDeposit} tokens. At the moment governance voting only takes place
+for challenged pull request merges which is described in Section
+\ref{sec:merge}, but in the future it can be used for other
+protocol decisions. One use case might be to vote on adding maintainers to a
+project. Token holders have an incentive to be voters because they stand
+to earn rewards if they vote well. Voters on the winning side of a vote increase
+their deposits by \textproc{voterRewardPercentage}. At the same time, voters on
+the losing side of a vote decrease their deposits by \textproc{voterPenaltyPercentage}.
 
 \subsection{Curating Issues}
 
@@ -132,6 +145,7 @@ repository. Consequently, the former maintainer would not only lose the staked
 tokens, but also the economic value of future issue token rewards. The
 possibility of losing tokens and maintainer status serves to encourage
 maintainer to only merge pull requests that ensure the quality of the project.
+
 
 \begin{figure*}[p!]
   \centering

@@ -1,8 +1,8 @@
 \documentclass[twocolumn]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[backend=bibtex,block=ragged]{biblatex} % block=ragged wraps lines in bib
-\usepackage{hyperref}
 \usepackage{url}
+\usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{framed}
 \usepackage{algpseudocode}
@@ -22,11 +22,12 @@
 
 \hypersetup{
   colorlinks=true,
-  linkcolor=blue
+  linkcolor=blue,
+  breaklinks=true
 }
 
-\setcounter{biburllcpenalty}{7000}
-\setcounter{biburlucpenalty}{6000}
+\urlstyle{same}
+
 \bibliography{bib/introduction, bib/background, bib/git, bib/protocol, bib/designpatterns}
 
 \begin{document}
