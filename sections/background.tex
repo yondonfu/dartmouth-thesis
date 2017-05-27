@@ -1,140 +1,7 @@
 \section{Background}
-
-Although blockchains have only recently captured the attention of academics and
-business people, the technical foundations of blockchains actually have a longer
-history. Blockchains use ideas rom past work by computer science
-researchers in the areas of distributed consensus, electronic money
-and digital time-stamping.
-
-\subsection{Distributed Consensus}
-
-The reliability of a distributed system depends on system proccesses to
-reach consensus on particular values. We can analyze a distributed system as a
-replicated state machine consisting of a state machine replicated across
-multiple processes using a deterministic state transition function to map a set
-of inputs and the current state to a new state\cite{faulttolerant}. State
-transitions are atomic such that they either occur completely or do not occur at
-all, consistent such that they must be valid mappings of inputs and the current
-state to a new state and durable such that once they occur, state is permanently
-updated. Thus, we can consider state transition function inputs as transactions\cite{transactions}.
-
-A system using multiple proccesses is vulnerable to proccess faults that cause
-unexpected process behavior. Faults can be broadly categorized as fail-stop
-faults, where processes crash and other proccesses can detect the failure, and
-Byzantine faults, where processes can exhibit arbitrary and potentially
-malicious behavior\cite{faulttolerant}. The problem of handling Byzantine faults
-is more complex than that of handling fail-stop faults because Byzantine faulty
-processes can transmit conflicting information to other processes that might
-not be immediately detected\cite{byzantine}.
-
-Consequently, distributed systems require specific consensus algorithms to
-handle Byzantine faults. One example of a Byzantine fault tolerant consensus
-algorithm is Practical Byzantine Fault Tolerance (PBFT) which offers system
-reliability as long as out of $n$ processes there are $\frac{n - 1}{3}$ or less
-faulty processes at any given point in time\cite{pbft}. However, PBFT cannot
-guarantee system reliability if $\frac{n - 1}{3}$ or more processes collude.
-
-\subsection{Electronic Money}
-
-The advent of the Internet and the mainstream adoption of computing devices
-encouraged the development of many forms of electronic money by recording
-balances electronically on devices.
-
-In 1983, David Chaum introduced a cryptographic protocol for anonymous payments using
-blind signatures. In Chaum's protocol, a bank uses its private key to sign
-blinded tokens and payees accept signed tokens by clearing a
-signed token with the bank\cite{blindsignatures}. The authenticity of tokens can
-be guaranteed by verifying the bank's signature on tokens with the bank's public
-key. The bank also does not know the identity of a payer when clearing a signed
-token sent by a payee because the token was blinded to obfuscate the amount and sender the bank
-originally signed the token. Chaum applied this protocol in his DigiCash project.
-
-One of the flaws of DigiCash is that it can only offer durable
-transactions in exchange for decreased anonymity. Users must present tokens to
-the bank for verification or else they are vulnerable to double spending attacks
-since electronic messages can easily be duplicated\cite{camp1995}. Furthermore,
-reliance on the bank creates a bottleneck for system throughput and a central
-point of failure. If a bank's private key is compromised, an attacker can use
-the bank's private key to create counterfeit tokens.
-
-Easily duplicated electronic messages leave electronic money systems vulnerable
-to denial of service attacks. As a solution, Adam Back proposed using hashcash, a
-easily verifiable, but difficult to compute cost function to mint
-tokens\cite{hashcash}. The cost function or \textit{proof-of-work} is based on finding partial hash
-collisions on the $k$-bit string $0^{k}$, for which the fastest known algorithm
-is brute force meaning users must perform a certain amount of work in terms of
-computing cycles to mint tokens. A proof-of-work requirement discourages
-electronic message duplication by making message creation costly.
-
-Nick Szabo highlighted the utility of proof-of-work for electronic money in his bit gold protocol. The protocol
-uses a proof of work function to compute a string of bits that is timestamped in a distributed property title registry\cite{bitgold}. Users can
-verify owernship of a string of bits in the title registry. In contrast with
-DigiCash, bit gold allows valuable bits to be created,
-transferred and stored without depending on a trusted third party. However, a
-system implementing such a protocol was never implemented in practice.
-
-\subsection{Digital Time-Stamping}
-
-Widespread digitization of all types of documents brought many benefits to
-society, but also introduced the question of how to prove the existence and time of creation or change of a
-digital document.
-
-In 1991, Haber and Stornetta presented a time-stamping method for digital
-documents that consisted of certificates cryptographically signed by a time-stamping service. The
-certificates contain the hash of the document as well as linking information from a
-previous certificate which includes a hash of the previous certificate's linking
-information\cite{haber1991}. The result is a hash linked chain of certificates
-that prevents the faking of time-stamps.
-
-Bayer, Haber and Stornetta extended this time-stamping method using merkle
-trees. In the original time-stamping method, verification of a document
-timestamp can require at most $N$ steps by following the chain links to a
-time-stamp certificate that is trustworthy\cite{bayer1993}. Instead of linking $N$
-hashes of documents, the hash values can be stored in a merkle tree.
-Participants can record the hashes of their own documents and the sibling hash
-values along the path from the document hash to the root of the merkle tree.
-Consequently, verification can be done in at most $\lg N$ steps by presenting the
-document hash and the $\lg N$ hashes on the path to the root. This modified
-time-stamping approach reduces storage requirements and verification time.
-
-\subsection{Blockchains}
-\label{sec:blockchains}
-
-Blockchains combine learnings from past work in distributed consensus,
-electronic money and digital time-stamping. A blockchain is a type of distributed system with two key defining
-characteristics. The first characteristic is that transactions are grouped into blocks. A
-common optimization reminiscient of Bayer, Haber and
-Stronetta's digital time-stamping method using merkle trees is to store the root of a merkle tree that contains
-transactions in the block header. This optimization allows clients to easily
-verify transactions solely using downloaded block headers without storing all
-the actual transactions. The second characteristic is that blocks
-are linked by cryptographic hashes. As demonstrated by Haber and Stornetta's
-work with hash linked digital timestamps, a hash linked chain of blocks prevents
-tampering of blocks unless an adversary has majority control of the system such
-that it can rewrite the entire hash linked chain. The result is a distributed ledger that is not controlled or managed by a
-central entity powered by a network of connected computers that use a consensus
-mechanism to reach agreement over shared data\cite{whatisblockchain}.
-
-The first blockchain was the Bitcoin blockchain\cite{bitcoin}. Bitcoin uses a
-proof-of-work consensus algorithm based on Adam Back's hashcash cost function.
-Network nodes, commonly known as miners, solve partial hash collisions to propose blocks of transactions. Additionally, Bitcoin also introduced an economic mechanism as a
-complement to cryptographic primitives to secure distributed systems by
-rewarding miners with an economically valuble token - the
-bitcoin cryptocurrency. Miners are economically motivated to help secure and add
-new transactions to the blockchain.
+\label{sec:background}
 
 \subsection{Ethereum}
-
-Vitalik Buterin developed Ethereum as a solution to leverage the distributed
-consensus capabilities of blockchains to create decentralized
-applications. Ethereum is a blockchain with built-in Turing
-complete programming language that allow users to write so called \textit{smart
-  contracts} that define arbitrary state transition functions\cite{ethereum}.
-Nodes in the Ethereum network run the Ethereum Virtual Machine (EVM). The value
-proposition of smart contracts is the ability to define arbitrary rules and
-agreements in a self-enforcing and self-executing program. As a result,
-participants in a protocol or network can trust the automatic enforced execution
-of code in the smart contract rather than trust some centralized entity.
 
 Although security focused members of the computer science community have
 expressed a fair amount of concern about the viability of Ethereum as a
@@ -146,6 +13,8 @@ to better secure the Ethereum network including formal verification,
 proof-of-stake as an alternative consensus algorithm to proof-of-work and smart
 contract programming languages with stronger security guarantees.
 Consequently, with these points in mind we decided to build the OpenCollab protocol on Ethereum.
+
+\subsection{Cryptographic Tokens}
 
 % Local Variables:
 % org-ref-default-bibliography: ../bib/background.bib

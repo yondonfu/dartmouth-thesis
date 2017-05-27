@@ -1,4 +1,4 @@
-\documentclass[twocolumn]{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[backend=bibtex,block=ragged]{biblatex} % block=ragged wraps lines in bib
 \usepackage{url}
@@ -23,12 +23,11 @@
 \hypersetup{
   colorlinks=true,
   linkcolor=blue,
-  breaklinks=true
 }
 
 \urlstyle{same}
 
-\bibliography{bib/introduction, bib/background, bib/git, bib/protocol, bib/designpatterns}
+\bibliography{bib/introduction, bib/background, bib/git, bib/protocol, bib/related}
 
 \begin{document}
 
@@ -45,7 +44,7 @@
 \include{sections/background}
 \include{sections/git}
 \include{sections/protocol}
-\include{sections/designpatterns}
+\include{sections/related}
 \include{sections/conclusion}
 
 \printbibliography
