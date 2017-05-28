@@ -1,5 +1,5 @@
 \section{OpenCollab Protocol}
-\label{sec:opencollab}
+\label{sec:protocol}
 
 The OpenCollab protocol is implemented by a set of Ethereum smart contracts. By
 building on the Ethereum platform, we can rely on security properties of the
@@ -44,12 +44,19 @@ token serves the following purposes in the protocol:
     in more detail in Section \ref{sec:merge}.
 \end{itemize}
 
+Since OCT is neccessary to perform actions in an open source software project
+and can be freely traded on the open market, it will have a floating price on
+the open market. The price of OCT will reflect interest in and desire to
+influence a project.
+
 An initial allocation of tokens will be distributed so that the various protocol
 roles can be fulfilled by token holders. A project creator can initialize an OpenCollab repository and mint a certain amount of
 tokens for the initial allocation. The initial allocation might be done using a
-token crowdsale or by disbursement at the discretion of the project creator.
+token crowdsale or by disbursement at the discretion of the project creator. The
+protocol currently does not dictate how to properly use funds accumulated from a
+token crowdsale.
 
-OCT is an ERC20 compliant token\cite{erc20} and is divisble by $10^{18}$. When a
+OCT is an ERC20 token and is divisble by $10^{18}$. When a
 repository using the OpenCollab protocol is created, a smart contract is created
 governing a OCT that is specific to that particular repository. As a result,
 there can be many repository specific versions of OCT.
@@ -61,31 +68,32 @@ Token holders can elect to participate in governance voting by depositing
 for challenged pull request merges which is described in Section
 \ref{sec:merge}, but in the future it can be used for other
 protocol decisions. One use case might be to vote on adding maintainers to a
-project. Token holders have an incentive to be voters because they stand
-to earn rewards if they vote well. Voters on the winning side of a vote increase
-their deposits by \textproc{voterRewardPercentage}. At the same time, voters on
-the losing side of a vote decrease their deposits by \textproc{voterPenaltyPercentage}.
+project. Another use case might be to vote on the proper usage of funds
+accumulated by a project during a token crowdsale. Token holders have an
+incentive to be voters because they can earn rewards. The deposits of voters on
+the winning side of a vote increase by \textproc{voterRewardPercentage}. At the
+same time, the deposits of voters on the losing side of a vote decrease by \textproc{voterPenaltyPercentage}.
 
 \subsection{Curating Issues}
 
 Curators stake a number of tokens to an issue to signal the importance that they
 place on the issue. Since curators lock up their tokens for a period of time
-when they stake tokens to an issue, they have limited curation power. Curators either exchange funds for tokens by purchasing them
-on the secondary market or work for tokens by being a
-contributor or maintainer. Furthermore, since curators take on the risk of a
+when they stake tokens to an issue, they have limited curation power. Since curators take on the risk of a
 fall in token value, they have skin in the game\cite{skininthegame}. If curators
 signal importance for bad issues, developers poorly allocate their time and
-attention. If developers properly allocate their time and attention on resolving
-issues that would increase the quality of a project, the community might lose
+attention. If developers do not properly allocate their time and attention on resolving
+issues that would improve the quality of a project, the community might lose
 interest and less people would desire influence over the project leading to a
 fall in token value. Consequently, curators have an incentive to signal
 importance for issues that accurately reflect the needs of the community. As
 well curated issues are resolved, the value of the token would increase thereby
-benefiting curators.
+benefiting curators. Contributors and maintainers are attracted to token staked
+issues because the token reward associated with resolving these issues is
+proportional to the amount of tokens staked to the issue.
 
 \subsection{Opening Pull Requests}
 
-Contributors open pull requests by staking \textproc{contributorStake} tokens,
+Contributors open pull requests by calling \textproc{openPullRequest(issueId, contractFork)} and staking \textproc{contributorStake} tokens,
 where \textproc{contributorStake} is a repository parameter.
 
 If a contributor's pull request is successfully merged by a maintainer, the
@@ -93,7 +101,10 @@ contributor receives a portion of the issue's token reward. The portion can be
 calculated as \textproc{reward} - (\textproc{reward} $*$ \textproc{maintainerPercentage}).
 
 If a contributor's pull request is closed without being merged into the project,
-the contributor's \textproc{contributorStake} staked tokens are destroyed.
+the contributor's \textproc{contributorStake} staked tokens are destroyed. The
+possibility of losing tokens discourages a potential contributor from flooding a
+project with pull requests of subpar quality which relieves some of the burden
+on maintainers of filtering high quality pull requests from poor quality pull requests.
 
 \subsection{Merging Pull Requests}
 \label{sec:merge}
@@ -102,14 +113,25 @@ Maintainers merge pull requests by staking \textproc{maintainerStake} tokens,
 where \textproc{maintainerStake} is a repository parameter.
 
 If a maintainer wants to merge a pull request, it calls
-\textproc{initMergePullRequest(id)} to signal an intent to merge a particular pull
+\textproc{initMergePullRequest(pullRequestId)} to signal an intent to merge a particular pull
 request and starts a challenge period. During this period, any token holder can
-challenge the maintainer by calling \textproc{challenge()} and staking
+challenge the maintainer by calling \textproc{challenge(maintainer)} and staking
 \textproc{challengerStake} tokens.
 
-If a maintainer is not challenged during the challenge period, he can call
-\textproc{mergePullRequest(id)}. The maintainer receives a portion of the
-issues's token reward which can be calculated as \textproc{reward} $*$ \textproc{maintainerPercentage}.
+If a maintainer is not challenged during the challenge period, it can call
+\textproc{mergePullRequest(pullRequestId)}. A successful call to
+\textproc{mergePullRequest(pullRequestId)} mints a number of new tokens
+proportional to the number of tokens staked to the resolved issue. The maintainer receives a portion of the
+issues's token reward which can be calculated as \textproc{reward} $*$
+\textproc{maintainerPercentage}. The protocol flow for an unchallenged merge is
+depicted in Figure \ref{fig:unchallenged}.
+
+\begin{figure}[]
+  \centering
+  \includegraphics[width=\linewidth,keepaspectratio]{figures/OpenCollab-Protocol-Curation-And-Opening-Merging-Pull-Requests.png}
+  \caption{Curating, opening pull requests and merging unchallenged pull requests}
+  \label{fig:unchallenged}
+\end{figure}
 
 If a maintainer is challenged during the challenge period, a voting
 period begins. Voting takes place using a two step commit and reveal protocol
@@ -119,7 +141,7 @@ smart contract vote to uphold or veto a maintainer's merge by calling
 \textproc{commitVote(hash)} with the cryptographic hash of their vote and a secret
 phrase. A vote to uphold is a $1$ and a vote to veto is a $2$. The secret phrase
 can be any random string only known to the voter. The value of the vote is
-secure from an attacker as long as only the voter knows the secret phrase used
+secure from an adversary as long as only the voter knows the secret phrase used
 when generating the hash. We use the SHA3 \textproc{keccak256} hash function
 since it is used internally by Ethereum.
 
@@ -135,9 +157,17 @@ deposits. Voters on the winning side of the vote are rewarded such that
 \textproc{voterRewardPercentage} is added to their deposits.
 
 If a maintainer's merge decision is upheld, the maintainer is able to call
-\textproc{mergePullRequest(id)} to finalize the merge. The challenger's
+\textproc{mergePullRequest(pullRequestId)} to finalize the merge. The challenger's
 \textproc{challengerStake} staked tokens are destroyed and the maintainer can
-claim his portion of the issue token reward.
+claim his portion of the issue token reward. The protocol flow for an upheld
+challenged merge is depicted in Figure \ref{fig:challengedUpheld}.
+
+\begin{figure}[]
+  \centering
+  \includegraphics[width=\linewidth,keepaspectratio]{figures/OpenCollab-Protocol-Challenging-Merges-Upheld.png}
+  \caption{Upholding a challenged merge}
+  \label{fig:challengedUpheld}
+\end{figure}
 
 If a maintainer's merge decision is vetoed, the challenger's staked tokens are
 returned and the maintainer's \textproc{maintainerStake} tokens are destroyed and is removed from the maintainer set for the
@@ -145,31 +175,20 @@ repository. Consequently, the former maintainer would not only lose the staked
 tokens, but also the economic value of future issue token rewards. The
 possibility of losing tokens and maintainer status serves to encourage
 maintainer to only merge pull requests that ensure the quality of the project.
+The protocol flow for a vetoed challenged merge is depicted in Figure \ref{fig:challengedVetoed}.
 
-
-\begin{figure*}[p!]
-  \centering
-  \includegraphics[width=\linewidth,keepaspectratio]{figures/OpenCollab-Protocol-Curation-And-Opening-Merging-Pull-Requests.png}
-  \caption{Curating, opening pull requests and merging unchallenged pull requests}
-\end{figure*}
-
-\begin{figure*}[p!]
-  \centering
-  \includegraphics[width=\linewidth,keepaspectratio]{figures/OpenCollab-Protocol-Challenging-Merges-Upheld.png}
-  \caption{Upholding a challenged merge}
-\end{figure*}
-
-\begin{figure*}[p!]
+\begin{figure}[]
   \centering
   \includegraphics[width=\linewidth,keepaspectratio]{figures/OpenCollab-Protocol-Challenging-Merges-Veto.png}
   \caption{Vetoing a challenged merge}
-\end{figure*}
+  \label{fig:challengedVetoed}
+\end{figure}
 
 \subsection{Amortisation of Work}
 
 Each computation step taken by an Ethereum smart contract costs a certain amount
 of gas, an internal accounting unit. As a result, when writing smart contracts,
-it is important to keep in mind gas costs. One of the most costly programming
+it is important to keep gas costs in mind. One of the most costly programming
 constructs that can be included in a smart contract is a loop over a large array
 of elements. If the array of elements can become arbitrarily large, the gas cost
 of iterating over the array can also become arbitrarily large.
@@ -179,23 +198,68 @@ round depending on whether they were on the winning or losing side of the vote.
 A simple and naive way of performing the accounting for these penalties and
 rewards would be to loop through all voters and check if they were on the
 winning or losing side of the most recent vote. This accounting can be done at
-the end of the \textproc{voteResult()} function.
+the end of the \textproc{voteResult()} function as described in Figure \ref{fig:allVoters}.
+
+\begin{figure}[]
+  \centering
+  \begin{lstlisting}
+    // vr = latest voting round
+    for (uint256 i = 0; i < voters.length; i++) {
+      if(vr.votes[voters[i]].voteValue == VoteValue.None) {
+        // Voter abstained
+        // Penalize voter
+      } else {
+        if (vr.result == vr.votes[voters[i]].voteValue) {
+          // Voter on winning side
+          // Reward voter
+        } else {
+          // Voter on losing side
+          // Penalize voter
+        }
+      }
+  \end{lstlisting}
+  \caption{Calculating penalties and rewards for all voters in \textproc{voteResult()}}
+  \label{fig:allVoters}
+\end{figure}
 
 However, the size of the voters array can become arbitrarily large as more token
-holders put down despoits to participate in governance voting. As the voters
-array grows in size, the gas cost of performing the accounting for penatlies and
-rewards after a vote will grow as well. Accounting for penatlies and rewards in
+holders put down deposits to participate in governance voting. As the voters
+array grows in size, the gas cost of performing the accounting for penalties and
+rewards after a vote will grow as well. Accounting for penalties and rewards in
 such a way will eventually become too expensive.
 
 A common design pattern used in smart contracts to avoid massive gas costs in
 single function calls is amortisation of work\cite{amortisationWork}. We can
 break up the work being done over other operations. In the OpenCollab protocol,
 rather than updating voter deposits with penalties and rewards after every vote,
-we introduce a \textproc{voterCheckIn()} function. The function updates a voter
-deposit with penalties and rewards for all voting rounds that occured since the
-last voting round that the voter checked in to.
+we introduce a \textproc{voterCheckIn()} function as described in Figure
+\ref{fig:voterCheckIn}.
 
-Voters can only withdraw their deposits if they have checked in to the latest voting round. Voters are
+\begin{figure}[]
+  \centering
+  \begin{lstlisting}
+    for (uint256 i = startRound; i < rounds.length; i++) {
+      if (rounds[i].votes[msg.sender].voteValue == VoteValue.None) {
+        // Voter abstained
+        // Penalize voter
+      } else {
+        if (rounds[i].result == rounds[i].votes[msg.sender].voteValue) {
+          // Voter on winning side
+          // Reward voter
+        } else {
+          // Voter on losing side
+          // Penalize voter
+        }
+      }
+    }
+  \end{lstlisting}
+  \caption{Amorisation of work - voters calculate their own penalties and
+    rewards in \textproc{voterCheckIn()}}
+  \label{fig:voterCheckIn}
+\end{figure}
+
+The function updates a voter deposit with penalties and rewards for all voting rounds that occured since the
+last voting round that the voter checked in to. Voters can only withdraw their deposits if they have checked in to the latest voting round. Voters are
 incentivized to call \textproc{voterCheckIn()} frequently because otherwise the
 gas cost of the function increases with the number of voting rounds that the
 voter has not checked in. As a result, the work of calculating penalties and rewards for votes is distributed across
@@ -203,54 +267,45 @@ all voters and we avoid large gas costs associated with single function calls.
 
 \subsection{Future Work}
 
-\begin{figure*}
-  \begin{minipage}{\textwidth}
-    \begin{framed}
-      \begin{lstlisting}
-        // vr = latest voting round
-        for (uint256 i = 0; i < voters.length; i++) {
-          if(vr.votes[voters[i]].voteValue == VoteValue.None) {
-            // Voter abstained
-            // Penalize voter
-          } else {
-            if (vr.result == vr.votes[voters[i]].voteValue) {
-              // Voter on winning side
-              // Reward voter
-            } else {
-              // Voter on losing side
-              // Penalize voter
-            }
-          }
-        \end{lstlisting}
-    \end{framed}
-  \end{minipage}
-  \caption{Calculating penalties and rewards for all voters in \textproc{voteResult()}}
-\end{figure*}
+The OpenCollab protocol is a proof-of-concept protocol exploring the integration
+of aligned economic incentives in an open source software project using a token
+powered protocol. At the moment, the set of smart contracts have only been
+tested using a local Ethereum node and do not optimize gas usage. Next steps
+would include deployment to an Ethereum test network and refactoring the contracts such that they can be deployed without
+exceeding the block gas limits in the test network.
 
-\begin{figure*}
-  \begin{minipage}{\textwidth}
-    \begin{framed}
-      \begin{lstlisting}
-        for (uint i = startRound; i < rounds.length; i++) {
-          if (rounds[i].votes[msg.sender].voteValue == VoteValue.None) {
-            // Voter abstained
-            // Penalize voter
-          } else {
-            if (rounds[i].result == rounds[i].votes[msg.sender].voteValue) {
-              // Voter on winning side
-              // Reward voter
-            } else {
-              // Voter on losing side
-              // Penalize voter
-            }
-          }
-        }
-      \end{lstlisting}
-    \end{framed}
-  \end{minipage}
-  \caption{Amorisation of work - voters calculate their own penalties and
-    rewards in \textproc{voterCheckIn()}}
-\end{figure*}
+Future work would also include formal validation of the protocol described. This
+formal validation process would be composed of two components: formal
+verification of smart contract behavior and a formal game-theoretic analysis of
+protocol economics.
+
+Formal verification of Ethereum smart contract behavior is an active area of
+research. Although Ethereum smart contracts are subject to the halting problem
+due to the use of a Turing complete programming language, there is a subset of
+smart contracts that will provably halt and programmers can design their smart
+contracts to fall within that subset\cite{halting}. Furthermore, existing tools such as
+Oyente, a symbolic execution tool, can already find a number of potential
+security bugs in smart contracts, thereby preventing incorrect contract behavior\cite{oyente}. The development of safer higher level
+programming languages such as Viper with stronger type systems and provable
+termination can also improve the effectiveness of static code
+analyzers\cite{viper}. These projects can provide the
+backbone for formal methods of verifying smart contract behavior.
+
+Formal game-theoretic analysis of protocol economics is a new and emerging area
+of research. The design of the OpenCollab protocol assumes rational economic
+actors that will behave honestly as long as they stand to suffer larger economic
+losses when behaving dishonestly than when behaving honestly or stand to reap
+larger economic rewards when behaving honestly than when behaving dishonestly.
+The OpenCollab protocol includes a number of protocol staking parameters that
+define the required amount of tokens for performing certain actions. A formal
+game-theoretic analysis of the OpenCollab protocol might include proofs
+demonstrating the safety of the protocol as long as these protocol staking parameters
+are fine tuned accordingly.
+
+Though formal verification of smart contract behavior and formal game-theoretic
+analysis of protocol economics are crucial components of validating the
+OpenCollab protocol, they are out of the scope of this particular thesis so we
+leave them as areas for future research.
 
 % Local Variables:
 % org-ref-default-bibliography: ../bib/protocol.bib

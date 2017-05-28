@@ -1,23 +1,3 @@
-\subsection*{Abstract}
-
-Open source software is one of the fundamental building blocks of today's
-technology dependent society and is relied upon by parties ranging from large technology corporations
-to individual hobbyist developers. The open question left for technologists is
-how to make open source software projects more sustainable. Attempts to provide more support for open
-source software projects such as bounty systems fall short of aligning the
-incentives of all parties involved.
-
-The rise of decentralized networks of self-organizing, self-coordinating users
-incentivized by valuable cryptographic tokens enabled by Ethereum smart
-contracts creates the possibility of a system with embedded economics for open
-source software development that aligns the incentives of all parties. We
-present two contributions that can serve as building blocks for a better
-solution to open source software sustainability: a command line tool that
-enables a decentralized Git workflow without the need for a centralized service
-like Github and a proof-of-concept blockchain based protocol for incentivizing
-open source software development using a cryptographic token. Both contributions
-are implemented using Ethereum smart contracts.
-
 \section{Introduction}
 
 In today's software dependent society, open source software is everywhere.
@@ -48,9 +28,9 @@ open source software project needs to be both healthy and supported.
 A healthy and supported project optimizes the use of developer time and
 attention, the scarcest resources in open source software projects.
 Communication between developers and users in a healthy project informs
-developers of community needs and issues to potentially focus their time and
+developers of community needs and issues to focus their time and
 attention on. Availability of financial and technical resources in a supported
-project ensures developers are free to allocate their all of their time and attention on
+project ensures developers are free to allocate all of their time and attention on
 project issues. Consequently, in a healthy and supported project, developers can
 properly allocate their time and attention according to community needs.
 
@@ -63,28 +43,56 @@ interface\cite{ubuntuUnity}. Canonical's failure to properly poll for user
 opinion and allocate developer time and attention accordingly ultimately hurt
 the Ubuntu project.
 
-\subsection{Models for Sustaining Open Source Software}
+\subsection{Models for Open Source Software Sustainability}
 
-A proposed solution to open source software sustainability is a bounty system
+A number of models for open source software sustainability exist today, but the
+applicability of a model depends on the nature of the open source
+software project in question and the particular needs of the project.
+
+Bug bounty platforms such as HackerOne connect projects with cybersecurity
+experts that find code vulnerabilities in exchange for monetary
+rewards\cite{hackerone}. While these platforms can improve the quality of a
+project's codebase, they primarily benefit company backed projects rather than community
+supported open source software projects. Companies have the financial resources
+to offer monetary rewards to cybersecurity experts. The same may not hold true
+for community backed open source software projects. As a result, project support
+is not fully addressed. Furthermore, bug bounty platforms help projects resolve vulnerabilities,
+but do not help projects resolve feature requests and determine a project
+roadmap. Consequently, project health is not fully addressed.
+
+Company led maintenance of open source software projects is another model for
+open source software sustainability. This model is practiced by companies like
+Facebook with the React Javascript library and RedHat with the RedHat enterprise
+distribution of Linux\cite{react, redhat}. Since Facebook and RedHat both lead
+the maintenance of their respective open source software projects, the projects
+are supported by the resources of their backing companies. As a result, project
+support is addressed. However, since company employed developers are the primary
+maintainers of these projects, it is possible for project health to be
+compromised such that project developers only cater to the needs of the backing
+companies, but not to the needs of the rest of the project community. Due to
+this possibility, this model does not fully address project health.
+
+Another model for open source software sustainability is a general bounty system
 for project issues such as the one operated by the website
 Bountysource\cite{bountysource}. In these systems, users can attach monetary
 bounties to project issues that are rewarded to contributors that successfully
 resolve issues. While these bounty systems may help projects attract more
 contributors, they do not take into account the incentives of maintainers. The
 work done by maintainers to review and merge in code is just
-as crucial as the work done by contributors. Consequently, bounty systems only
+as crucial as the work done by contributors. Consequently, general bounty systems only
 partially help with project support.
 
-Furthermore, bounty systems do not necessarily help with
+Bounty systems do not necessarily help with
 project health. Although in some cases, multiple users placing bounties on an
 issue might signal the importance the community places on that particular issue,
-it is also possible for malicious actors to place large bounties on issues that
-would negatively impact project quality. Such a possibility can place a burden
+it is also possible for individuals to place large bounties on issues that
+would serve their own short-term needs, but negatively impact project's longer term quality. Such a possibility can place a burden
 on developers of filtering signal from noise and also introduces the possibility
 of collusion - a contributor might share a large bounty if a maintainer agrees
-to merge it into the codebase even if the contributed code is of poor quality.
-As a result, bounty systems can actualy hamper communication
-between developers and users leading to unmet community needs. Adding any form of financial compensation to open source
+to merge it into the codebase even if the contributed code is of poor quality. As a result, bounty systems can actualy hamper communication
+between developers and users leading to unmet community needs. Additionally, bounty systems can encourage drive by contributions characterized
+by bounty hunters resolving issues with code that does not take into account the
+rest of the codebase, thereby leading to the emergence of bugs. Adding any form of financial compensation to open source
 software projects needs to align the incentives of all parties
 involved or else perverse incentives might arise leading to malicious behavior
 that harms the quality of the project.
@@ -95,10 +103,10 @@ entity not only results in a central point of failure, but can actually be more
 costly for users. For example, although users can freely transact within the bounty system, Bountysource
 charges a 10\% withdrawal fee if a user wants to cash out. As a result, users
 choose between giving up a portion of their monetary rewards and giving up the numerous
-opportunies to use their monetary rewards for their own benefit outside the bounty system. This withdrawal free
+opportunies to use their monetary rewards for their own benefit outside the bounty system. This withdrawal fee
 discourages users from leaving the system which benefits Bountysource, but harms users.
 
-\subsection{Cryptocurrencies and Blockchain Systems}
+\subsection{Cryptocurrencies and Blockchains}
 
 The advent of cryptocurrencies and blockchains introduce a new decentralized
 paradigm for social systems. Cryptocurrencies are digital assets that rely on
@@ -108,8 +116,7 @@ cryptocurrencies managed by a distributed network of computers as opposed to
 fiat currencies that are managed by a central bank. Blockchains are the
 underlying technology that make these cryptocurrencies possible. These data
 structures establish the state of a system, whether it be a currency system or
-otherwise, without placing trust in a single entity. We will discuss blockchains
-in more detail in Section \ref{sec:blockchains}.
+otherwise, without placing trust in a single entity.
 
 Blockchains can not only enable the creation of a bounty system that is not
 managed by a single entity, but also allows for the creation of a system with
@@ -127,7 +134,7 @@ users with protocol native cryptocurrencies if conditions established in the
 protocol rule set are fulfilled.
 
 Communities around open source software projects currently rely on centralized
-services to coordinate and collaborate. Adding monetary rewards to a project in
+services to coordinate and collaborate. Furthermore, adding monetary rewards to a project in
 a way that aligns interests of all parties is not only difficult, but also adds
 middlemen and transaction costs to the system. Cryptocurrencies and
 blockchains can be the building blocks for a potentially better system.
@@ -140,15 +147,15 @@ The primary contributions of this thesis are the following:
   \item A command line tool that enables a decentralized Git workflow for
     developing open source software without relying on a centralized service
     like Github as described in Section \ref{sec:git}. The code is available
-    open source at \url{https://github.com/yondonfu/opencollab}.
+    open source at \url{https://github.com/yondonfu/opencollab-cli}.
   \item A proof-of-concept blockchain based protocol to incentivize open source
-    software development as described in Section \ref{sec:opencollab}. The code
-    for the set of smart contracts implementing the protocol is available open source at \url{https://github.com/yondonfu/opencollab-contracts}.
+    software development as described in Section \ref{sec:protocol}. The code
+    for the set of smart contracts implementing the protocol is available open source at \url{https://github.com/yondonfu/opencollab}.
 \end{itemize}
 
 The motivation behind these contributions is to push the discussion on how to
 improve open source software sustainability. In particular, these contributions are
-attempts to answer the following questions relating to open source software sustainability.
+attempts to answer the following questions relating to open source software sustainability:
 
 \begin{itemize}
   \item How can developers poll for user opinion on issue
@@ -159,7 +166,7 @@ attempts to answer the following questions relating to open source software sust
  \end{itemize}
 
 A detailed description of these contributions can be found in Sections
-\ref{sec:git} and \ref{sec:opencollab}.
+\ref{sec:git} and \ref{sec:protocol}.
 
 % Local Variables:
 % org-ref-default-bibliography: ../bib/introduction.bib

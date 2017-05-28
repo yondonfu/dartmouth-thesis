@@ -1,4 +1,5 @@
 \section{Related Work}
+\label{sec:related}
 
 Although cryptocurrencies and blockchains have only recently captured the attention of academics and
 business people, the technical foundations of these systems actually have a longer
@@ -39,8 +40,8 @@ potentially traitorous generals. The traitorous generals can be characterized as
 Byzantine processes in a computing context.\cite{byzantine}.
 
 Lamport et al. offered a few solutions to the Byzantine Generals Problem,
-one involving oral messages requiring fewer than $f$ traitorous generals given
-$3f + 1$ generals, and another involving messages with unforgeably signatures
+one involving oral messages requiring at least $3f + 1$ generals given $f$
+traitorous generals, and another involving messages with unforgeably signatures
 that allows an arbitrary number of traitorous generals. However, due to an
 assumption that the absence of messages can always be detected, these solutions
 are only applicable to synchronous environments. In synchronous environments,
@@ -49,7 +50,7 @@ messages, but in asynchronous environments, system designers cannot make any
 assumptions about network delays\cite{tendermint}. In asynchronous environments,
 an adversary might have the power to schedule network messages. Consequently, the solutions
 of Lamport et al. would not be sufficient in an asynchronous environment
-because there is no guarantee of the detecting the absence of messages.
+because there is no guarantee of detecting the absence of messages.
 
 The FLP impossibility proof states that distributed consensus in an asynchronous
 environment with deterministic processes is impossible if a single process can
@@ -57,14 +58,13 @@ crash\cite{FLP}. However, the proof does not preclude distributed consensus in
 asynchronous environments with certain weak synchronous assumptions or with
 randomization. One example of a Byzantine fault tolerant consensus
 algorithm that uses weak synchronous assumptions by tweaking a timeout parameter is Practical Byzantine Fault Tolerance (PBFT) which offers system
-resilience as long as there are fewer than $f$ Byzantine processes given $3f +
-1$ total processes at any given point in time\cite{pbft}. A number of computer
+resilience as long as there are at least $3f + 1$ total processes given $f$ Byzantine processes\cite{pbft}. A number of computer
 science researchers have also explored Byzantine fault tolerant consensus
 algorithms using randomization. Ben-Or offered one such algorithm that involves
 processes using a register that is probabilistically set to either $0$ or $1$ to
 decide on a binary value. The algorithm works with probability eventually
-reaching $1$, but also requires fewer than $f$ Byzantine processes given $5f +1$
-total processes\cite{freechoice}. We will observe in Section \ref{sec:blockchains}
+reaching $1$, but also requires at least $5f + 1$ total processes given $f$
+Byzantine processes\cite{freechoice}. We will observe in Section \ref{sec:blockchains}
 that certain cryptocurrency systems and blockchains use a combination of weak
 synchronous assumptions and randomization to achieve Byzantine fault tolerant
 distributed consensus in asynchronous environments.
@@ -81,11 +81,11 @@ blinded tokens and payees accept signed tokens by clearing a
 signed token with the bank\cite{blindsignatures}. The authenticity of tokens can
 be guaranteed by verifying the bank's signature on tokens with the bank's public
 key. The bank also does not know the identity of a payer when clearing a signed
-token sent by a payee because the token was blinded to obfuscate the amount and sender the bank
+token sent by a payee because the token was blinded to obfuscate the amount and
+sender when the bank
 originally signed the token. Chaum applied this protocol in his DigiCash project.
 
-One of the flaws of DigiCash is that it can only offer durable
-transactions in exchange for decreased anonymity. Users must present tokens to
+One of the flaws of DigiCash is that users must present tokens to
 the bank for verification or else they are vulnerable to double spending attacks
 since electronic messages can easily be duplicated\cite{camp1995}. Furthermore,
 reliance on the bank creates a bottleneck for system throughput and a central
@@ -95,10 +95,10 @@ the bank's private key to create counterfeit tokens.
 Easily duplicated electronic messages leave electronic money systems vulnerable
 to denial of service attacks. As a solution, Adam Back proposed using hashcash, a
 easily verifiable, but difficult to compute cost function to mint
-tokens\cite{hashcash}. The cost function or \textit{proof-of-work} is based on finding partial hash
+tokens. The cost function or \textit{proof-of-work} is based on finding partial hash
 collisions on the $k$-bit string $0^{k}$, for which the fastest known algorithm
 is brute force meaning users must perform a certain amount of work in terms of
-computing cycles to mint tokens. A proof-of-work requirement discourages
+computing cycles to mint tokens\cite{hashcash}. A proof-of-work requirement discourages
 electronic message duplication by making message creation costly.
 
 Nick Szabo highlighted the utility of proof-of-work for electronic money in his bit gold protocol. The protocol
@@ -159,7 +159,7 @@ publicly known process identities. These conditions leave distributed systems
 vulnerable to Sybil attacks consisting of
 an adversary using multiple identities to influence consensus
 decisions\cite{sybil}. Additionally, as a global cryptocurrency system, Bitcoin
-operates over the public internet, an asynchronous environment. Consequently,
+operates over the public internet, an asynchronous environment.
 
 Bitcoin achieves Byzantine fault tolerant distributed consensus in an public, adversarial
 and asynchronous environment using randomization in the form of a proof-of-work
@@ -167,7 +167,7 @@ consensus algorithm. Proof-of-work is based on solving moderately hard
 cryptographic puzzles in order to prevent computationally bounded adversaries
 from claiming many identites in the system\cite{anonymousByzantine}. More specifically, Bitcoin's
 proof-of-work algorithm is based on Adam Back's hashcash cost function. A subset
-of Bitcoin nodes, the processes of the larger distributed system, solve partial
+of Bitcoin nodes, the processes of the distributed system, solve partial
 hash collisions to append blocks of transactions to the Bitcoin blockchain and
 update the state of the system. These nodes are commonly known as miners. This
 type of consensus algorithm has become commonly known as eventually consistent
@@ -182,7 +182,7 @@ incentivize miners to secure and maintain the Bitcoin blockchain. The first
 transaction in a new block mints new economically valuable tokens, the Bitcoin
 cryptocurrency, that is rewarded to the miner that successfully solved a partial
 hash collision and added the new block\cite{bitcoin}. As a result, miners are
-economically motivated behave honestly. It is important to also note that a number of
+economically motivated to behave honestly. It is important to also note that a number of
 flaws in Bitcoin have been discovered over the years, but a discussion of these
 flaws is outside the scope of this thesis and will be left for outside research.
 
@@ -198,6 +198,11 @@ proposition of smart contracts is the ability to define arbitrary rules and
 agreements in a self-enforcing and self-executing program. As a result,
 participants in a protocol or network can trust the automatic enforced execution
 of code in the smart contract rather than trust some centralized entity.
+
+The native cryptocurrency of Ethereum is Ether. Similar to the Bitcoin
+cryptocurrency, Ether can be used as a medium of exchange and store of value.
+Additionally, Ether is used to pay for the computational steps taken by Ethereum
+smart contracts which are metered by an internal accounting unit called gas.
 
 Similar to Bitcoin, Ethereum uses a proof-of-work consensus algorithm. However,
 the core Ethereum developers have announced plans to move toward a

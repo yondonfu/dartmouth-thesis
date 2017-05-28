@@ -1,7 +1,68 @@
 \section{Background}
 \label{sec:background}
 
+Cryptographic tokens and blockchains (more specifically Ethereum) serve as the foundation of the contributions
+for this thesis. A more detailed discussion of blockchains can be found in
+Section \ref{sec:related}.
+
+\subsection{Cryptographic Tokens}
+
+Although Bitcoin is often referred to as a cryptocurrency, it is also commonly
+classified as a cryptographic token. We make this differentiation in terminology
+to highlight the difference in usage that is associated with each term. Both
+terms share the common definition of a digital asset secured by cryptography that be transferred without
+the permission of its original issuer. Cryptocurrencies are primarily associated
+with being mediums of exchange and stores of value. While cryptographic tokens
+can also serve these roles, they also offer utility in that they provide
+the holder access to a useful service. Bitcoin was the first cryptographic token
+and it allowed holders to access and write to a global and immutable decentralized
+database by creating transactions. Cryptographic tokens can be compared to paid
+API keys that are redeemable for a service and that can be freely traded without
+the permission of the original API key issuer\cite{balajiTokens}. In the
+remaining sections of this thesis, we will use the term tokens to refer to
+cryptographic tokens with the properties highlighted above.
+
+Token systems rely on underlying blockchains to provide a decentralized database
+that contains records of token ownership. Ownership of a token is defined by
+ownership of the private key referenced by a record with the associated public key in the blockchain. The absence of a centralized
+intermediary enforcing the ownership of tokens allows token holders to freely
+transfer their tokens to other parties. The ability to freely trade tokens and
+the ability to use tokens to access a service gives tokens a floating price on
+the open market\cite{balajiTokens}. Thus, when integrated into a protocol, tokens can serve as an economic mechanism that aligns the incentives of
+network users. Individuals purchase tokens on the open market to access a useful service offered by
+the protocol. Purchasers become token holders that stand to benefit if the token rises in
+value. These early adopters increase interest in the protocol by actively using
+the service provided or building additional applications and services on top of it. Increased
+protocol interest leads to increased demand for tokens so that users can access
+the service offered by the protocol. The result is token value appreciation
+and a new wave of token holders that are financially incentivized to increase
+the value of the protocol\cite{fatprotocols}.
+
+A key observation of these token powered protocols is that token holders and
+protocol users are the same group of individuals. Consequently, the incentives of the users are
+aligned such that they all want to see the value of their token holdings increase.
+
 \subsection{Ethereum}
+
+Token powered protocols can be built in a number of ways. As mentioned
+previously, Bitcoin is an example of a token that powers the Bitcoin protocol
+which offers users peer to peer value transfer as a service. The key
+component of a token system is the underlying blockchain that it relies on.
+Individuals can choose to create an entirely new blockchain to support their
+token systems. Alternatively, they can build their token systems on existing
+blockchains such as the Bitcoin blockchain. Although token systems such as
+Counterparty have been built on top of the Bitcoin blockchain, the
+Bitcoin blockchain and its limited built-in scripting language does not provide developers with a lot flexibility and
+expressiveness when designing the mechanics of their token systems\cite{counterparty}.
+
+Ethereum is a blockchain designed for general computation and offers a built-in
+Turing complete programming language that is more flexible and expressive than the
+Bitcoin scripting language allowing users to write so called \textit{smart
+  contracts}\cite{ethereum}. These smart contracts can define the rules and state associated
+with a token powered protocol. Users of token powered protocols interact with the smart contract and
+trust the automatic enforced execution of the smart contract code which is
+secured by the underlying Ethereum blockchain. Interest in token powered protocols have given rise to a community developed
+standard for tokens built on top of Ethereum called ERC20\cite{erc20}.
 
 Although security focused members of the computer science community have
 expressed a fair amount of concern about the viability of Ethereum as a
@@ -13,8 +74,6 @@ to better secure the Ethereum network including formal verification,
 proof-of-stake as an alternative consensus algorithm to proof-of-work and smart
 contract programming languages with stronger security guarantees.
 Consequently, with these points in mind we decided to build the OpenCollab protocol on Ethereum.
-
-\subsection{Cryptographic Tokens}
 
 % Local Variables:
 % org-ref-default-bibliography: ../bib/background.bib
